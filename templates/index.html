@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>DoS Attack Detection Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="page">
+
+<h1>DoS Attack Detection Dashboard</h1>
+
+<div class="controls">
+  <select id="interfaceSelect" onchange="changeInterface()"></select>
+  <button id="startBtn" onclick="startSystem()">Start System</button>
+  <button id="stopBtn" onclick="stopSystem()">Stop System</button>
+  <button id="clearBtn" onclick="clearSystem()">Clear</button>
+  <select id="timeRange" onchange="changeRange()">
+    <option value="30">30s</option>
+    <option value="60">1 minute</option>
+    <option value="300">5 minutes</option>
+  </select>
+  <select id="exportFormat">
+    <option value="txt">TXT</option>
+    <option value="csv">CSV</option>
+  </select>
+  <button id="exportBtn" onclick="exportAlerts()">Export</button>
+</div>
+
+<div class="status-row">
+  <div class="card">
+    <div class="label">Trạng thái</div>
+    <div class="value status-stopped" id="statusLabel">Chưa chạy</div>
+  </div>
+  <div class="card">
+    <div class="label">Scan Timer</div>
+    <div class="value"><span id="timer">0</span>s</div>
+  </div>
+  <div class="card">
+    <div class="label">Attack Type</div>
+    <div class="value" id="attackType">None</div>
+  </div>
+  <div class="card">
+    <div class="label">Detected Attacks</div>
+    <div class="value" id="attackCount">0</div>
+  </div>
+</div>
+
+<div class="chart-card">
+  <h3>Network Traffic</h3>
+  <div class="chart-wrap">
+    <canvas id="trafficChart"></canvas>
+  </div>
+</div>
+
+<div class="table-card">
+  <h3>Attack Alerts</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Source IP</th>
+          <th>Destination IP</th>
+          <th>Protocol</th>
+          <th>Packets</th>
+          <th>Severity</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="alertTable">
+        <tr class="empty-row"><td colspan="6">Chưa có cảnh báo nào</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>
