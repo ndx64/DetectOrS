@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 
 def _traffic_history_ticker():
-    """Chạy nền, mỗi giây chốt số packet vừa bắt được vào traffic_history."""
+    """Runs in the background, recording the packet count into traffic_history every second."""
     while True:
         time.sleep(1)
         tick_traffic_history()
@@ -39,7 +39,7 @@ def start():
     window = data.get("window_seconds")
 
     if not iface:
-        return jsonify({"error": "Thiếu 'interface'"}), 400
+        return jsonify({"error": "Missing 'interface'"}), 400
 
     with state.lock:
         if threshold:
@@ -75,7 +75,7 @@ def alerts():
 
 @app.route("/stats")
 def stats():
-    """Dữ liệu để vẽ chart traffic thật + trạng thái hệ thống."""
+    """Data used to render the real traffic chart + system status."""
     with state.lock:
         return jsonify({
             "running": state.running,
@@ -89,9 +89,9 @@ def stats():
 @app.route("/export")
 def export_alerts():
     """
-    Xuất toàn bộ alert hiện có ra file.
-    Dùng query param ?format=txt (mặc định) hoặc ?format=csv
-    Ví dụ: GET /export?format=csv
+    Exports all current alerts to a file.
+    Use the query param ?format=txt (default) or ?format=csv
+    Example: GET /export?format=csv
     """
     fmt = request.args.get("format", "txt").lower()
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -116,7 +116,7 @@ def export_alerts():
             headers={"Content-Disposition": f"attachment; filename={filename}"},
         )
 
-    # mặc định: txt, dễ đọc, phù hợp đính kèm report/writeup
+    
     lines = []
     lines.append("=" * 60)
     lines.append("DoS Attack Detection - Alert Export")
@@ -128,7 +128,7 @@ def export_alerts():
     lines.append("")
 
     if not alerts_snapshot:
-        lines.append("(Không có cảnh báo nào được ghi nhận trong phiên này)")
+        lines.append("(No alerts were recorded during this session)")
     else:
         for i, a in enumerate(alerts_snapshot, 1):
             lines.append(
