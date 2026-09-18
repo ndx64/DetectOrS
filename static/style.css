@@ -36,7 +36,7 @@ color:#94a3b8;
 margin:0 0 8px 0;
 }
 
-/* ---- Thanh điều khiển ---- */
+
 .controls{
 display:flex;
 align-items:center;
@@ -112,7 +112,7 @@ border-color:#16a34a;
 background:#15803d;
 }
 
-/* ---- Hàng thẻ trạng thái ---- */
+
 .status-row{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -148,7 +148,7 @@ color:#94a3b8;
 color:#f87171;
 }
 
-/* ---- Chart ---- */
+
 .chart-card{
 background:#111827;
 border:1px solid #1f2937;
@@ -167,7 +167,7 @@ width:100% !important;
 height:100% !important;
 }
 
-/* ---- Bảng cảnh báo ---- */
+
 .table-card{
 background:#111827;
 border:1px solid #1f2937;
