@@ -46,7 +46,6 @@ const chart = new Chart(ctx, {
   }
 })
 
-// ---- Nạp danh sách interface thật từ backend khi trang load ----
 async function loadInterfaces() {
   try {
     const res = await fetch("/interfaces")
@@ -108,7 +107,6 @@ async function startSystem() {
     }
   }, 1000)
 
-  // poll backend thật mỗi giây thay vì random data
   pollInterval = setInterval(pollBackend, 1000)
 }
 
@@ -160,10 +158,8 @@ function changeRange() {
   maxScanTime = val
 }
 
-// ---- Xuất file log các cuộc tấn công đã ghi nhận (txt hoặc csv) ----
 function exportAlerts() {
   const fmt = document.getElementById("exportFormat").value
-  // để trình duyệt tự tải file về (backend trả kèm header Content-Disposition)
   window.location.href = `/export?format=${fmt}`
 }
 
@@ -190,7 +186,6 @@ function updateTable() {
   })
 }
 
-// ---- Lấy dữ liệu thật từ backend: /stats (traffic) + /alerts (cảnh báo) ----
 async function pollBackend() {
   if (!running) return
 
@@ -202,13 +197,11 @@ async function pollBackend() {
     const stats = await statsRes.json()
     const newAlerts = await alertsRes.json()
 
-    // cập nhật chart bằng dữ liệu traffic thật từ backend
     const history = stats.history.slice(-maxPoints)
     chart.data.labels = history.map(h => h.time)
     chart.data.datasets[0].data = history.map(h => h.count)
     chart.update()
 
-    // cập nhật bảng alert + đếm attack
     if (newAlerts.length !== alerts.length) {
       alerts = newAlerts
       attackCount = alerts.length
@@ -221,7 +214,6 @@ async function pollBackend() {
     }
 
     if (!stats.running) {
-      // backend tự dừng (ví dụ sniff bị lỗi) -> đồng bộ lại UI
       stopSystem()
     }
   } catch (err) {
